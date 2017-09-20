@@ -15,10 +15,10 @@ const (
 type Surge interface {
 	Token() string
 	SetToken(token string)
-	// Post(endpoint string, payload json)
 	Login(username, password string) (string, error)
 	List() ([]string, error)
 	// Publish(projectPath, domain string) error
+	Teardown(domain string) error
 	getURL(endpoint string) string
 }
 

@@ -7,14 +7,22 @@ import (
 	"github.com/urfave/cli"
 )
 
+// Flags contains all options for the cli
 type Flags struct {
 	Username cli.StringFlag
 	Password cli.StringFlag
+	Project  cli.StringFlag
+	Domain   cli.StringFlag
+	// Add      cli.StringFlag
+	// Remove   cli.StringFlag
 }
 
 func main() {
-	app := cli.NewApp()
 	s := surge.NewSurge("")
+	app := cli.NewApp()
+
+	app.Name = "surge"
+	app.Usage = "Unofficial CLI for the surge.sh CDN"
 
 	flags := &Flags{
 		cli.StringFlag{
@@ -23,15 +31,23 @@ func main() {
 			Usage:  "Your surge `username`",
 		},
 		cli.StringFlag{
-			Name:   "password, p",
+			Name:   "password, pw",
 			EnvVar: "SURGE_PASSWORD",
 			Usage:  "Your surge `password`",
 		},
+		cli.StringFlag{
+			Name:   "project, p",
+			EnvVar: "SURGE_PROJECT",
+			Usage:  "Path to projects asset directory",
+			Value:  "./",
+		},
+		cli.StringFlag{
+			Name:   "domain, d",
+			EnvVar: "SURGE_DOMAIN",
+			Usage:  "Your surge `password`",
+		},
 	}
-
-	app.Name = "surge"
-	app.Usage = "CLI for the surge.sh CDN"
-	app.Flags = []cli.Flag{flags.Username, flags.Password}
+	app.Flags = []cli.Flag{flags.Username, flags.Password, flags.Project, flags.Domain}
 
 	app.Commands = []cli.Command{
 		{
@@ -48,6 +64,14 @@ func main() {
 			Flags: []cli.Flag{flags.Username, flags.Password},
 			Action: func(c *cli.Context) error {
 				return List(c, s)
+			},
+		},
+		{
+			Name:  "teardown",
+			Usage: "Delete project at domain",
+			Flags: []cli.Flag{flags.Username, flags.Password},
+			Action: func(c *cli.Context) error {
+				return Teardown(c, s)
 			},
 		},
 	}
