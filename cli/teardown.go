@@ -20,7 +20,7 @@ func Teardown(c *cli.Context, s surge.Surge) error {
 
 	err = s.Teardown(domain)
 	if err != nil {
-		return err
+		return cli.NewExitError(err, 1)
 	}
 
 	return nil
