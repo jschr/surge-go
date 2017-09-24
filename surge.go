@@ -17,7 +17,7 @@ type Surge interface {
 	SetToken(token string)
 	Login(username, password string) (string, error)
 	List() ([]string, error)
-	// Publish(projectPath, domain string) error
+	Publish(projectPath, domain string) error
 	Teardown(domain string) error
 	getURL(endpoint string) string
 }

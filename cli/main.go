@@ -68,7 +68,7 @@ func main() {
 		},
 		{
 			Name:  "teardown",
-			Usage: "Delete project at domain",
+			Usage: "tear down a published project",
 			Flags: []cli.Flag{flags.Username, flags.Password},
 			Action: func(c *cli.Context) error {
 				return Teardown(c, s)
@@ -77,11 +77,7 @@ func main() {
 	}
 
 	app.Action = func(c *cli.Context) error {
-		err := Login(c, s)
-		if err != nil {
-			return err
-		}
-		return nil
+		return Publish(c, s)
 	}
 
 	app.Run(os.Args)
